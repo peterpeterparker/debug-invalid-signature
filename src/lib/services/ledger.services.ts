@@ -22,7 +22,7 @@ export const loadBalance = async ({ owner }: { owner: string | undefined | null 
 
 	const balance = await accountBalance({
 		accountIdentifier: AccountIdentifier.fromPrincipal({ principal: Principal.fromText(owner) }),
-		certified: false
+		certified: true
 	});
 	balanceStore.set(balance);
 };
