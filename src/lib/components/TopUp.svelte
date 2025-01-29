@@ -9,7 +9,7 @@
 
 	let disabled = $derived($balanceStore <= 0n);
 
-	let status = $state<"idle" | "in_progress" | "request_stop">("idle");
+	let status = $state<'idle' | 'in_progress' | 'request_stop'>('idle');
 
 	const topUp = async () => {
 		if (isNullish($userStore?.owner)) {
@@ -24,7 +24,11 @@
 			return;
 		}
 
-		await topUpServices({ identity });
+		await Promise.all([
+			topUpServices({ identity }),
+			topUpServices({ identity }),
+			topUpServices({ identity })
+		]);
 	};
 
 	const repeatTopUp = async () => {
@@ -36,9 +40,9 @@
 
 		await loadBalance({ owner: $userStore?.owner });
 
-		console.log("Balance reloaded 🆗");
+		console.log('Balance reloaded 🆗');
 
-		if ($balanceStore >= 0 && status === "in_progress") {
+		if ($balanceStore >= 0 && status === 'in_progress') {
 			console.log('Repeating top-up 🔁');
 			await repeatTopUp();
 		}
@@ -54,20 +58,20 @@
 			console.log(error);
 		}
 
-		status = "idle";
-	}
+		status = 'idle';
+	};
 
 	const toggle = async () => {
 		if (status === 'in_progress') {
-				status = "request_stop";
-				return;
+			status = 'request_stop';
+			return;
 		}
 
 		status = 'in_progress';
 		topUps();
-	}
+	};
 </script>
 
 <article class="pb-4">
-	<Button {disabled} onclick={toggle}>{status === "idle" ? "Start top-up" : "Stop"}</Button>
+	<Button {disabled} onclick={toggle}>{status === 'idle' ? 'Start top-up' : 'Stop'}</Button>
 </article>
