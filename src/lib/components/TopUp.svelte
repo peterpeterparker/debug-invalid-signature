@@ -24,11 +24,11 @@
 			return;
 		}
 
-		await Promise.all([
-			topUpServices({ identity }),
-			topUpServices({ identity }),
-			topUpServices({ identity })
-		]);
+		await topUpServices({ identity });
+		await topUpServices({ identity });
+		await topUpServices({ identity });
+		await topUpServices({ identity });
+		await topUpServices({ identity });
 	};
 
 	const repeatTopUp = async () => {
