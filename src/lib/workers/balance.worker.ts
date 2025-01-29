@@ -43,10 +43,20 @@ const fetchBalance = async ({ identity, owner }: IdentityParams & PostMessageDat
 		agent
 	});
 
-	const balance = await accountBalance({
-		accountIdentifier: AccountIdentifier.fromPrincipal({ principal: Principal.fromText(owner) }),
-		certified: true
+	const accountIdentifier = AccountIdentifier.fromPrincipal({
+		principal: Principal.fromText(owner)
 	});
 
-	console.log('Worker balance:', balance);
+	const [balanceUncertified, balanceCertified] = await Promise.all([
+		accountBalance({
+			accountIdentifier,
+			certified: false
+		}),
+		accountBalance({
+			accountIdentifier,
+			certified: true
+		})
+	]);
+
+	console.log('Worker balance:', balanceUncertified, balanceCertified);
 };
