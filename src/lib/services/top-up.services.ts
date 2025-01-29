@@ -4,7 +4,7 @@ import {
 	DEV,
 	CONSOLE_ID,
 	TOP_UP_CANISTER_MEMO,
-	CMC_ID
+	CMC_ID, TOP_UP_VALUE
 } from '$lib/constants/app.constants';
 import { AccountIdentifier, LedgerCanister, SubAccount } from '@dfinity/ledger-icp';
 import type { Identity, HttpAgent } from '@dfinity/agent';
@@ -42,7 +42,7 @@ const sendIcp = async ({ agent }: { agent: HttpAgent }): Promise<bigint> => {
 
 	return await transfer({
 		to: recipient,
-		amount: 10_000n,
+		amount: TOP_UP_VALUE,
 		memo: TOP_UP_CANISTER_MEMO,
 		createdAt: nowInBigIntNanoSeconds()
 	});

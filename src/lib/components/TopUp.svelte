@@ -6,6 +6,7 @@
 	import { isNullish } from '@dfinity/utils';
 	import { unsafeIdentity } from '@junobuild/core';
 	import { balanceStore } from '$lib/stores/balance.store';
+	import { ICP_FEE, TOP_UP_VALUE } from '$lib/constants/app.constants';
 
 	let disabled = $derived($balanceStore <= 0n);
 
@@ -38,7 +39,7 @@
 
 		console.log('Balance reloaded 🆗');
 
-		if ($balanceStore >= 0 && status === 'in_progress') {
+		if ($balanceStore >= ICP_FEE + TOP_UP_VALUE && status === 'in_progress') {
 			console.log('Repeating top-up 🔁');
 			await repeatTopUp();
 		}
