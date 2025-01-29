@@ -25,10 +25,6 @@
 		}
 
 		await topUpServices({ identity });
-		await topUpServices({ identity });
-		await topUpServices({ identity });
-		await topUpServices({ identity });
-		await topUpServices({ identity });
 	};
 
 	const repeatTopUp = async () => {
