@@ -1,35 +1,31 @@
-import { createAgent, nowInBigIntNanoSeconds, principalToSubAccount } from '@dfinity/utils';
+import { nowInBigIntNanoSeconds, principalToSubAccount } from '@dfinity/utils';
 import {
-	CONTAINER,
-	DEV,
 	CONSOLE_ID,
 	TOP_UP_CANISTER_MEMO,
-	CMC_ID, TOP_UP_VALUE
+	CMC_ID,
+	TOP_UP_VALUE
 } from '$lib/constants/app.constants';
 import { AccountIdentifier, LedgerCanister, SubAccount } from '@dfinity/ledger-icp';
-import type { Identity, HttpAgent } from '@dfinity/agent';
 import { CMCCanister } from '@dfinity/cmc';
+import type { IdentityParams } from '$lib/types/identity';
+import { createAgent } from '$lib/api/agent.api';
 
-export const topUp = async ({ identity }: { identity: Identity }) => {
-	const agent = await createAgent({
-		identity,
-		...(DEV && { host: CONTAINER, fetchRootKey: true })
-	});
+export const topUp = async (params: IdentityParams) => {
+	const blockIndex = await sendIcp(params);
 
-	const blockIndex = await sendIcp({ agent });
-
-	console.log("Send ICP 👌");
+	console.log('Send ICP 👌');
 
 	await notifyTopUp({
-		agent,
+		...params,
 		blockIndex
 	});
 
-
-	console.log("Notify top-up 👌");
+	console.log('Notify top-up 👌');
 };
 
-const sendIcp = async ({ agent }: { agent: HttpAgent }): Promise<bigint> => {
+const sendIcp = async (params: IdentityParams): Promise<bigint> => {
+	const agent = await createAgent(params);
+
 	const { transfer } = LedgerCanister.create({
 		agent
 	});
@@ -49,12 +45,13 @@ const sendIcp = async ({ agent }: { agent: HttpAgent }): Promise<bigint> => {
 };
 
 const notifyTopUp = async ({
-	agent,
+	identity,
 	blockIndex: block_index
-}: {
-	agent: HttpAgent;
+}: IdentityParams & {
 	blockIndex: bigint;
 }) => {
+	const agent = await createAgent({ identity });
+
 	const { notifyTopUp } = CMCCanister.create({
 		agent,
 		canisterId: CMC_ID
