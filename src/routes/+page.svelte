@@ -1,8 +1,11 @@
 <script lang="ts">
 	import Balance from '$lib/components/Balance.svelte';
 	import TopUp from '$lib/components/TopUp.svelte';
+	import Worker from '$lib/components/Worker.svelte';
 </script>
 
-<Balance />
+<Worker>
+	<Balance />
 
-<TopUp />
+	<TopUp />
+</Worker>
